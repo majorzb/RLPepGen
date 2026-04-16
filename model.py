@@ -173,7 +173,7 @@ class TransformerDecoderLayer(nn.Module):
         return x, self_attn_weights
 
 
-class PeptideTransformer(nn.Module):
+class RLPepGen(nn.Module):
     """多肽生成Transformer模型"""
 
     def __init__(self, config):

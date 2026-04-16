@@ -2,8 +2,8 @@ import pandas as pd
 import argparse
 import numpy as np
 
-from config import PepRLGenConfig, TrainerConfig
-from model import  PeptideTransformer
+from config import RLPepGenConfig, TrainerConfig
+from model import  RLPepGen
 from trainer import Trainer
 from dataload import AAdataset
 
@@ -72,11 +72,11 @@ if __name__ == '__main__':
         val_dataset=AAdataset(args,val_data,AA_set, max_seq_len,max_rec_len=300,aug_prob =0)
         test_dataset=AAdataset(args,test_data,AA_set, max_seq_len,max_rec_len=300,aug_prob = 0)
     #模型定义
-    mconf = PepRLGenConfig(train_dataset.vocab_size, max_len,max_rec_len=300, num_delt_G=num_delt_G,
+    mconf = RLPepGenConfig(train_dataset.vocab_size, max_len,max_rec_len=300, num_delt_G=num_delt_G,
                           n_layer=args.n_layer, n_head=args.n_head, n_embd=args.n_embd, is_pretrain=args.is_pretrain,
                           )
 
-    model = PeptideTransformer(mconf)
+    model = RLPepGen(mconf)
     if args.is_continue:
         model.load_state_dict(torch.load(f'./model/{args.pre_save_name}.pt'), strict=False)
         print('load model')

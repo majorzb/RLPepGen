@@ -1,4 +1,4 @@
-class PepRLGenConfig:
+class RLPepGenConfig:
     embd_pdrop = 0.3
     resid_pdrop = 0.3
     attn_pdrop = 0.3
