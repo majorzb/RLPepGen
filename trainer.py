@@ -26,6 +26,53 @@ class Trainer:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = self.model.to(self.device)
 
+
+    def check_model_freeze_status(self, model, verbose=True):
+        """
+        检查模型各层的冻结状态
+
+        参数:
+            model: PyTorch模型
+            verbose: 是否打印详细信息
+        """
+        total_params = 0
+        trainable_params = 0
+        frozen_params = 0
+
+        if verbose:
+            print("=" * 80)
+            print("模型冻结状态检查")
+            print("=" * 80)
+
+        # 按层名检查
+        for name, param in model.named_parameters():
+            total_params += param.numel()
+
+            if param.requires_grad:
+                trainable_params += param.numel()
+                status = "可训练"
+            else:
+                frozen_params += param.numel()
+                status = "已冻结"
+
+            if verbose:
+                print(f"{name:50} | {status:8} | 形状: {str(list(param.shape)):20} | 参数数: {param.numel():,}")
+
+        # 汇总信息
+        if verbose:
+            print("=" * 80)
+            print(f"总参数数: {total_params:,}")
+            print(f"可训练参数: {trainable_params:,} ({trainable_params / total_params * 100:.2f}%)")
+            print(f"冻结参数: {frozen_params:,} ({frozen_params / total_params * 100:.2f}%)")
+            print("=" * 80)
+
+        return {
+            "total": total_params,
+            "trainable": trainable_params,
+            "frozen": frozen_params,
+            "trainable_ratio": trainable_params / total_params if total_params > 0 else 0
+        }
+
     def save_checkpoint(self):
         raw_model = self.model.module if hasattr(self.model, "module") else self.model
         logger.info(f"Saving checkpoint to {self.config.ckpt_path}")

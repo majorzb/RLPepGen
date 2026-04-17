@@ -93,5 +93,6 @@ if __name__ == '__main__':
 
     trainer = Trainer(model, train_dataset, test_dataset, val_dataset,
                       tconf, train_dataset.stoi, train_dataset.itos, is_pretrain=args.is_pretrain)
+    status = trainer.check_model_freeze_status(model)
     #开始训练
     df = trainer.train()
