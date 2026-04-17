@@ -1,9 +1,9 @@
 import esm
 import argparse
-from model import PeptideTransformer
+from model import RLPepGen
 from numpy import random
 from RLtrainer import Trainer
-from config import myconfig, PepRLGenConfig, TrainerConfig
+from config import myconfig, RLPepGenConfig, TrainerConfig
 from score_model import *
 
 def set_seed(seed):
@@ -42,12 +42,12 @@ if __name__ == '__main__':
         max_seq_len=14
         max_len=15
 
-        mconf = PepRLGenConfig(args.vocab_size, args.block_size,n_layer=args.n_layer, n_head=args.n_head,max_rec_len=300,
+        mconf = RLPepGenConfig(args.vocab_size, args.block_size,n_layer=args.n_layer, n_head=args.n_head,max_rec_len=300,
                               n_embd=args.n_embd, is_pretrain=args.is_pretrain)
-        prior = PeptideTransformer(mconf)
+        prior = RLPepGen(mconf)
         prior.load_state_dict(torch.load('./model/'+args.prior_name+'.pt'))
         prior.to('cuda:0')
-        agent = PeptideTransformer(mconf)
+        agent = RLPepGen(mconf)
 
         is_continue = False
         if is_continue:
