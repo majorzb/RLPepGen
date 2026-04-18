@@ -156,7 +156,7 @@ class Trainer:
         augmented_nll = prior_nll + self.sigma * reward_terms
 
         # Loss = [ln P(x)_augmented - ln P(x)_agent]^2
-        rl_loss = torch.pow((augmented_nll - self.sigma / 3 - agent_nll), 2)
+        rl_loss = torch.pow((augmented_nll - agent_nll), 2)
 
         # 5. Experience Replay (经验回放)
         loss = rl_loss.mean()
