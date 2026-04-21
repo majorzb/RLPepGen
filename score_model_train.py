@@ -49,7 +49,8 @@ class Dataset(Dataset):
         # 转换并填充序列
         seq_tokens = [self.stoi.get(a, self.stoi['<unk>']) for a in self.seqs[idx]]
         rec_tokens = [self.stoi.get(a, self.stoi['<unk>']) for a in self.recs[idx]]
-
+        seq_tokens = [STOI['<cls>']] + seq_tokens + [STOI['<eos>']]
+        rec_tokens = [STOI['<cls>']] + rec_tokens + [STOI['<eos>']]
         seq_pad = self._pad_sequence(seq_tokens, 14)
         rec_pad = self._pad_sequence(rec_tokens, 200)
 
@@ -143,7 +144,7 @@ class Config:
         self.lr = 4e-5
         self.max_epoch = 800
         self.batch_size = 256
-        self.save_name = 'score_model'
+        self.save_name = 'score_model1'
         self.ckpt_path = f'./model/{self.save_name}.pt'
 
 
@@ -154,7 +155,7 @@ def main():
 
     # 1. 加载数据
     data = pd.read_csv('dataset/finetune.csv').sample(frac=1).reset_index(drop=True)
-    train_idx, test_idx = streaming_sequence_split(data.iloc[:1000, 0].values)
+    train_idx, test_idx = streaming_sequence_split(data.iloc[:, 0].values)
 
     train_loader = DataLoader(Dataset(data.iloc[train_idx], STOI, ITOS),
                               batch_size=config.batch_size, shuffle=True, pin_memory=True)
