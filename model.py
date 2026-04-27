@@ -157,8 +157,8 @@ class TransformerDecoderLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
         martrix = torch.tril(
             torch.ones(315, 315)).view(1, 1, 315, 315)
-        martrix[:, :, 16:, :] = 1
-        martrix[:, :, :, 16:] = 1
+        martrix[:, :, 15:, :] = 1
+        martrix[:, :, :, 15:] = 1
         self.register_buffer("mask", martrix)
     def forward(self, x: torch.Tensor) -> tuple:
 
